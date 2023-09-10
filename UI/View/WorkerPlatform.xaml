@@ -1,0 +1,94 @@
+﻿<Window x:Class="UI.WorkerPlatform"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Список работников" FontSize="26" FontWeight="Bold" Margin="10"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <DataGrid Grid.Column="0" 
+                      AutoGenerateColumns="False" IsReadOnly="True" 
+                      SelectedItem="{Binding SelectedWorker, Mode=TwoWay}" 
+                      ItemsSource= "{Binding Workers}" GridLinesVisibility="Vertical" 
+                      VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Visible">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Id}" Header="ID" Width="SizeToHeader" />
+                    <DataGridTextColumn Binding="{Binding FirstName}" Header="Имя" Width="0.2*"/>
+                    <DataGridTextColumn Binding="{Binding LastName}" Header="Фамилия" Width="0.2*"/>
+                    <DataGridTextColumn Binding="{Binding Patronymic}" Header="Отчество" Width="0.3*"/>
+                    <DataGridTextColumn Binding="{Binding Gender}" Header="Пол" Width="SizeToHeader"/>
+                    <DataGridTextColumn Binding="{Binding HasChildren}" Header="Наличие детей" Width="0.3*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="0.5*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Content="Имя:"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="Фамилия:"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="Отчество:"/>
+                    <Label Grid.Row="3" Grid.Column="0" Content="Пол:"/>
+                    <Label Grid.Row="4" Grid.Column="0" Content="Дата рождения:"/>
+                    <Label Grid.Row="5" Grid.Column="0" Content="Наличие детей:"/>
+
+                    <TextBox Grid.Row="0" Grid.Column="1" Width="120" Text="{Binding FirstName}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Width="120" Text="{Binding LastName}"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Width="120" Text="{Binding Patronymic}"/>
+                    <ComboBox Grid.Row="3" Grid.Column="1" Width="120" 
+                              SelectedItem="{Binding Gender}" ItemsSource="{Binding Genders}"
+                              SelectedValuePath="Name" DisplayMemberPath="Name"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Width="120" Text="{Binding BirthDate}"/>
+                    <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding HasChildren}"/>
+                </Grid>
+
+                <Grid Grid.Row="1" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Button Grid.Row="0" Content="Добавить" Command="{Binding CreateWorkerCommand}"/>
+                    <Button Grid.Row="1" Content="Обновить" Command="{Binding UpdateWorkerCommand}"/>
+                    <Button Grid.Row="2" Content="Удалить" Command="{Binding DeleteWorkerCommand}"/>
+                </Grid>
+            </Grid>
+        </Grid>
+
+
+    </Grid>
+</Window>

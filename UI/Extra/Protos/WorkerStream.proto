@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+option csharp_namespace = "UI.Protos.Client";
+import "google/protobuf/empty.proto";
+
+package WorkerGrpcService;
+
+service WorkerGrpcService {
+	rpc CreateWorker(CreateWorkerRequest) returns (WorkerResponse) {}
+	rpc GetWorker(GetWorkerRequest) returns (WorkerResponse) {}
+	rpc UpdateWorker(UpdateWorkerRequest) returns (WorkerResponse) {}
+	rpc DeleteWorker(DeleteWorkerRequest) returns (WorkerResponse) {}
+	rpc GetAllWorkers(google.protobuf.Empty) returns (GetAllWorkersResponse){}
+}
+
+message WorkerResponse {
+	int32 Id = 1;
+	string FirstName = 2;
+	string LastName = 3;
+	string Patronymic = 4;
+	string BirthDate = 5;
+	int32 GenderId = 6;
+	bool HasChildren = 7;
+}
+
+message GetWorkerRequest {
+	int32 Id = 1;
+}
+
+message UpdateWorkerRequest {
+	int32 id = 1;
+	string FirstName = 2;
+	string LastName = 3;
+	string Patronymic = 4;
+	string BirthDate = 5;
+	int32 GenderId = 6;
+	bool HasChildren = 7;
+}
+
+message DeleteWorkerRequest{
+	int32 Id = 1;
+}
+
+message CreateWorkerRequest {
+	string FirstName = 1;
+	string LastName = 2;
+	string Patronymic = 3;
+	string BirthDate = 4;
+	int32 GenderId = 5;
+	bool HasChildren = 6;
+}
+
+message WorkerRequest {
+	int32 Id = 1;
+	string FirstName = 2;
+	string LastName = 3;
+	string Patronymic = 4;
+	string BirthDate = 5;
+	int32 GenderId = 6;
+	bool HasChildren = 7;
+}
+
+message GetAllWorkersResponse {
+	repeated WorkerResponse workers = 1;
+}
+
+

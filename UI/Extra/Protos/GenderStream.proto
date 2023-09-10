@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "UI.Protos.Client";
+import "google/protobuf/empty.proto";
+
+package GenderGrpcService;
+
+service GenderGrpcService {
+	rpc GetAllGenders(google.protobuf.Empty) returns (GetAllGendersResponse){}
+}
+
+message GetAllGendersResponse {
+	repeated GenderGrpc Genders = 1;
+}
+
+message GenderGrpc {
+	int32 Id = 1;
+	string Name = 2;
+}
+
+
