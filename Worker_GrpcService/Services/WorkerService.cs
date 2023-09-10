@@ -1,7 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata.Ecma335;
 using Worker_GrpcService.DAL;
 using Worker_GrpcService.Protos.Server;
 
@@ -31,7 +30,7 @@ namespace Worker_GrpcService.Services
                 HasChildren = w.HasChildren
             }).ToListAsync();
 
-            response.Workers.AddRange(workers);
+            response.Workers.AddRange(workers.ToArray());
 
             return await Task.FromResult(response);
         }

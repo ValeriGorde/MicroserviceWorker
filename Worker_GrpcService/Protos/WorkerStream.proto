@@ -28,7 +28,7 @@ message GetWorkerRequest {
 }
 
 message UpdateWorkerRequest {
-	int32 id = 1;
+	int32 Id = 1;
 	string FirstName = 2;
 	string LastName = 3;
 	string Patronymic = 4;

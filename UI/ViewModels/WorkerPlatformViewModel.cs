@@ -26,6 +26,8 @@ namespace UI.ViewModels
             var channel = GrpcChannel.ForAddress("https://localhost:7139", channelOptions);
             genderGrpcClient = new GenderGrpcService.GenderGrpcServiceClient(channel);
             workerGrpcService = new WorkerGrpcService.WorkerGrpcServiceClient(channel);
+
+            OnCreating();
         }
 
         public void OnCreating() 
@@ -155,11 +157,11 @@ namespace UI.ViewModels
         /// <returns></returns>
         public async Task GetAllWorkers()
         {
-            var request = new Empty();
-            var response = await workerGrpcService.GetAllWorkersAsync(request);
+            var response = await workerGrpcService.GetAllWorkersAsync(new Empty());
 
             var workers = response.Workers.Select(w => new Worker
             {
+                Id = w.Id,
                 FirstName = w.FirstName,
                 LastName = w.LastName,
                 Patronymic = w.Patronymic,

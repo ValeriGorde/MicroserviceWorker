@@ -32,7 +32,7 @@
                     <DataGridTextColumn Binding="{Binding FirstName}" Header="Имя" Width="0.2*"/>
                     <DataGridTextColumn Binding="{Binding LastName}" Header="Фамилия" Width="0.2*"/>
                     <DataGridTextColumn Binding="{Binding Patronymic}" Header="Отчество" Width="0.3*"/>
-                    <DataGridTextColumn Binding="{Binding Gender}" Header="Пол" Width="SizeToHeader"/>
+                    <DataGridTextColumn Binding="{Binding Gender.Name}" Header="Пол" Width="SizeToHeader"/>
                     <DataGridTextColumn Binding="{Binding HasChildren}" Header="Наличие детей" Width="0.3*"/>
                 </DataGrid.Columns>
             </DataGrid>
