@@ -7,10 +7,15 @@ package GenderGrpcService;
 
 service GenderGrpcService {
 	rpc GetAllGenders(google.protobuf.Empty) returns (GetAllGendersResponse){}
+	rpc GetGenderById(GetGenderByIdRequest) returns (GenderGrpc){}
 }
 
 message GetAllGendersResponse {
 	repeated GenderGrpc Genders = 1;
+}
+
+message GetGenderByIdRequest {
+	int32 Id = 1;
 }
 
 message GenderGrpc {

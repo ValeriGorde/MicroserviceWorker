@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="620" Width="950">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.2*"/>
@@ -25,7 +25,7 @@
             <DataGrid Grid.Column="0" 
                       AutoGenerateColumns="False" IsReadOnly="True" 
                       SelectedItem="{Binding SelectedWorker, Mode=TwoWay}" 
-                      ItemsSource= "{Binding Workers}" GridLinesVisibility="Vertical" 
+                      ItemsSource= "{Binding Workers, UpdateSourceTrigger=PropertyChanged}" GridLinesVisibility="Vertical" 
                       VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Visible">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Id}" Header="ID" Width="SizeToHeader" />
@@ -69,7 +69,7 @@
                     <TextBox Grid.Row="1" Grid.Column="1" Width="120" Text="{Binding LastName}"/>
                     <TextBox Grid.Row="2" Grid.Column="1" Width="120" Text="{Binding Patronymic}"/>
                     <ComboBox Grid.Row="3" Grid.Column="1" Width="120" 
-                              SelectedItem="{Binding Gender}" ItemsSource="{Binding Genders}"
+                              SelectedItem="{Binding Gender, Mode=TwoWay}" ItemsSource="{Binding Genders}"
                               SelectedValuePath="Name" DisplayMemberPath="Name"/>
                     <TextBox Grid.Row="4" Grid.Column="1" Width="120" Text="{Binding BirthDate}"/>
                     <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding HasChildren}"/>
