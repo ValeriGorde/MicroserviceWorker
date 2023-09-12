@@ -8,7 +8,7 @@
         Title="MainWindow" Height="620" Width="950">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.1*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -22,28 +22,28 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <DataGrid Grid.Column="0" 
+            <DataGrid Grid.Column="0" Margin="10"
                       AutoGenerateColumns="False" IsReadOnly="True" 
                       SelectedItem="{Binding SelectedWorker, Mode=TwoWay}" 
-                      ItemsSource= "{Binding Workers, UpdateSourceTrigger=PropertyChanged}" GridLinesVisibility="Vertical" 
+                      ItemsSource= "{Binding Workers, Mode=TwoWay}" GridLinesVisibility="Vertical" 
                       VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Visible">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Id}" Header="ID" Width="SizeToHeader" />
                     <DataGridTextColumn Binding="{Binding FirstName}" Header="Имя" Width="0.2*"/>
                     <DataGridTextColumn Binding="{Binding LastName}" Header="Фамилия" Width="0.2*"/>
                     <DataGridTextColumn Binding="{Binding Patronymic}" Header="Отчество" Width="0.3*"/>
-                    <DataGridTextColumn Binding="{Binding Gender.Name}" Header="Пол" Width="SizeToHeader"/>
+                    <DataGridTextColumn Binding="{Binding Gender}" Header="Пол" Width="SizeToHeader"/>
                     <DataGridTextColumn Binding="{Binding HasChildren}" Header="Наличие детей" Width="0.3*"/>
                 </DataGrid.Columns>
             </DataGrid>
 
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="1" Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition Height="0.5*"/>
                 </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" >
+                <Grid Grid.Row="0" Margin="5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -58,21 +58,27 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="0" Content="Имя:"/>
-                    <Label Grid.Row="1" Grid.Column="0" Content="Фамилия:"/>
-                    <Label Grid.Row="2" Grid.Column="0" Content="Отчество:"/>
-                    <Label Grid.Row="3" Grid.Column="0" Content="Пол:"/>
-                    <Label Grid.Row="4" Grid.Column="0" Content="Дата рождения:"/>
-                    <Label Grid.Row="5" Grid.Column="0" Content="Наличие детей:"/>
 
-                    <TextBox Grid.Row="0" Grid.Column="1" Width="120" Text="{Binding FirstName}"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Width="120" Text="{Binding LastName}"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Width="120" Text="{Binding Patronymic}"/>
-                    <ComboBox Grid.Row="3" Grid.Column="1" Width="120" 
-                              SelectedItem="{Binding Gender, Mode=TwoWay}" ItemsSource="{Binding Genders}"
-                              SelectedValuePath="Name" DisplayMemberPath="Name"/>
-                    <TextBox Grid.Row="4" Grid.Column="1" Width="120" Text="{Binding BirthDate}"/>
-                    <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding HasChildren}"/>
+                    <Label Grid.Row="0" Grid.Column="0" Content="Имя:" Margin="10"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="Фамилия:" Margin="10"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="Отчество:" Margin="10"/>
+                    <Label Grid.Row="3" Grid.Column="0" Content="Пол:" Margin="10"/>
+                    <Label Grid.Row="4" Grid.Column="0" Content="Дата рождения:" Margin="10"/>
+                    <Label Grid.Row="5" Grid.Column="0" Content="Наличие детей:" Margin="10"/>
+
+                    <TextBox Grid.Row="0" Grid.Column="1" Width="130" 
+                             Text="{Binding FirstName}" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Width="130" 
+                             Text="{Binding LastName}" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Width="130" 
+                             Text="{Binding Patronymic}" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="3" Grid.Column="1" Width="130" 
+                              SelectedItem="{Binding Gender, Mode=TwoWay}" 
+                              ItemsSource="{Binding Genders}" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Width="130"
+                             Text="{Binding BirthDate}" VerticalAlignment="Center"/>
+                    <CheckBox Grid.Row="5" Grid.Column="1" IsChecked="{Binding HasChildren}"
+                              VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10"/>
                 </Grid>
 
                 <Grid Grid.Row="1" >

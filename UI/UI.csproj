@@ -23,7 +23,6 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Extra\Protos\GenderStream.proto" GrpcServices="Client" />
 		<Protobuf Include="Extra\Protos\WorkerStream.proto" GrpcServices="Client" />
 	</ItemGroup>
 

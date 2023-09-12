@@ -19,7 +19,7 @@ message WorkerResponse {
 	string LastName = 3;
 	string Patronymic = 4;
 	string BirthDate = 5;
-	int32 GenderId = 6;
+	string Gender = 6;
 	bool HasChildren = 7;
 }
 
@@ -33,7 +33,7 @@ message UpdateWorkerRequest {
 	string LastName = 3;
 	string Patronymic = 4;
 	string BirthDate = 5;
-	int32 GenderId = 6;
+	string Gender = 6;
 	bool HasChildren = 7;
 }
 
@@ -46,7 +46,7 @@ message CreateWorkerRequest {
 	string LastName = 2;
 	string Patronymic = 3;
 	string BirthDate = 4;
-	int32 GenderId = 5;
+	string Gender = 5;
 	bool HasChildren = 6;
 }
 
@@ -56,7 +56,7 @@ message WorkerRequest {
 	string LastName = 3;
 	string Patronymic = 4;
 	string BirthDate = 5;
-	int32 GenderId = 6;
+	string Gender = 6;
 	bool HasChildren = 7;
 }
 

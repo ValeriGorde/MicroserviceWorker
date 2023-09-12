@@ -7,7 +7,6 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<Protobuf Include="Protos\GenderStream.proto" GrpcServices="Server" />
 		<Protobuf Include="Protos\WorkerStream.proto" GrpcServices="Server" />
 	</ItemGroup>
 

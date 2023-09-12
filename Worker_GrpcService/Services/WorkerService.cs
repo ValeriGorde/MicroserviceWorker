@@ -20,7 +20,7 @@ namespace Worker_GrpcService.Services
         {
             if (request.FirstName == string.Empty || request.LastName == string.Empty ||
                 request.Patronymic == string.Empty || request.BirthDate == string.Empty ||
-                request.GenderId <= 0)
+                request.Gender == string.Empty)
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "Неккоректные исходные данные"));
 
             var worker = new Worker
@@ -29,7 +29,7 @@ namespace Worker_GrpcService.Services
                 LastName = request.LastName,
                 Patronymic = request.Patronymic,
                 BirthDate = request.BirthDate,
-                GenderId = request.GenderId,
+                Gender = request.Gender,
                 HasChildren = request.HasChildren
             };
 
@@ -42,7 +42,7 @@ namespace Worker_GrpcService.Services
                 FirstName = worker.FirstName,
                 LastName = worker.LastName,
                 Patronymic = worker.Patronymic,
-                GenderId = worker.GenderId,
+                Gender = worker.Gender,
                 BirthDate = worker.BirthDate,
                 HasChildren = worker.HasChildren
             });
@@ -67,7 +67,7 @@ namespace Worker_GrpcService.Services
                 LastName = worker.LastName,
                 Patronymic = worker.Patronymic,
                 BirthDate = worker.BirthDate,
-                GenderId = worker.GenderId,
+                Gender = worker.Gender,
                 HasChildren = worker.HasChildren
             });
         }
@@ -83,7 +83,7 @@ namespace Worker_GrpcService.Services
                 LastName = w.LastName,
                 Patronymic = w.Patronymic,
                 BirthDate = w.BirthDate,
-                GenderId = w.GenderId,
+                Gender = w.Gender,
                 HasChildren = w.HasChildren
             }).ToListAsync();
 
@@ -92,9 +92,39 @@ namespace Worker_GrpcService.Services
             return await Task.FromResult(response);
         }
 
-        public override Task<WorkerResponse> UpdateWorker(UpdateWorkerRequest request, ServerCallContext context)
+        public override async Task<WorkerResponse> UpdateWorker(UpdateWorkerRequest request, ServerCallContext context)
         {
-            return base.UpdateWorker(request, context);
+            if (request.Id <= 0 || request.FirstName == string.Empty || request.LastName == string.Empty ||
+                request.Patronymic == string.Empty || request.BirthDate == string.Empty ||
+                request.Gender == string.Empty)
+                throw new RpcException(new Status(StatusCode.InvalidArgument, "Неккоректные данные"));
+
+            var worker = _dbContext.Workers.FirstOrDefault(w => w.Id == request.Id);
+
+            if(worker != null)
+            {
+                worker.Id = request.Id;
+                worker.FirstName = request.FirstName;
+                worker.LastName = request.LastName;
+                worker.BirthDate = request.BirthDate;
+                worker.Gender = request.Gender;
+                worker.HasChildren = request.HasChildren;
+
+                await _dbContext.SaveChangesAsync();
+
+                return await Task.FromResult(new WorkerResponse
+                {
+                    Id = worker.Id,
+                    FirstName = worker.FirstName,
+                    LastName = worker.LastName,
+                    Patronymic = worker.Patronymic,
+                    BirthDate = worker.BirthDate,
+                    Gender = worker.Gender,
+                    HasChildren = worker.HasChildren
+                });
+            }
+
+            throw new RpcException(new Status(StatusCode.NotFound, "Пользователь не найден"));
         }
     }
 }

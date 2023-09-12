@@ -13,7 +13,6 @@ namespace UI.ViewModels
 {
     public class WorkerPlatformViewModel : BaseViewModel
     {
-        private readonly GenderGrpcService.GenderGrpcServiceClient genderGrpcClient;
         private readonly WorkerGrpcService.WorkerGrpcServiceClient workerGrpcClient;
 
         public WorkerPlatformViewModel()
@@ -26,7 +25,6 @@ namespace UI.ViewModels
                 HttpHandler = httpHandler
             };
             var channel = GrpcChannel.ForAddress("https://localhost:7139", channelOptions);
-            genderGrpcClient = new GenderGrpcService.GenderGrpcServiceClient(channel);
             workerGrpcClient = new WorkerGrpcService.WorkerGrpcServiceClient(channel);
 
             OnCreating();
@@ -34,7 +32,12 @@ namespace UI.ViewModels
 
         public void OnCreating()
         {
-            Task.Run(() => GetAllGenders());
+            Genders = new ObservableCollection<string>
+            {
+                "Женский",
+                "Мужской"
+            };
+
             Task.Run(() => GetAllWorkers());
         }
 
@@ -66,9 +69,8 @@ namespace UI.ViewModels
                     LastName = selectedWorker.LastName;
                     Patronymic = selectedWorker.Patronymic;
                     BirthDate = selectedWorker.BirthDate;
-                    GenderId = selectedWorker.GenderId;
-                    HasChildren = selectedWorker.HasChildren;
                     Gender = selectedWorker.Gender;
+                    HasChildren = selectedWorker.HasChildren;
                 }
             }
         }
@@ -130,8 +132,8 @@ namespace UI.ViewModels
         #endregion
 
         #region Gender
-        private ObservableCollection<Gender> genders;
-        public ObservableCollection<Gender> Genders
+        private ObservableCollection<string> genders;
+        public ObservableCollection<string> Genders
         {
             get { return genders; }
             set
@@ -141,24 +143,13 @@ namespace UI.ViewModels
             }
         }
 
-        private Gender gender;
-        public Gender Gender
+        private string gender;
+        public string Gender
         {
             get { return gender; }
             set
             {
                 gender = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private int genderId;
-        public int GenderId
-        {
-            get { return genderId; }
-            set
-            {
-                genderId = value;
                 OnPropertyChanged();
             }
         }
@@ -181,7 +172,7 @@ namespace UI.ViewModels
                         LastName = LastName,
                         Patronymic = Patronymic,
                         BirthDate = BirthDate,
-                        GenderId = Gender.Id,
+                        Gender = Gender,
                         HasChildren = HasChildren
                     });
                 });
@@ -202,6 +193,35 @@ namespace UI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Команда по обновлению работника
+        /// </summary>
+        private RelayCommand updateWorkerCommand;
+        public RelayCommand UpdateWorkerCommand
+        {
+            get
+            {
+                return updateWorkerCommand ??= new RelayCommand(async x =>
+                {
+                    await UpdateWorker(new Worker
+                    {
+                        Id = SelectedWorker.Id,
+                        FirstName = FirstName,
+                        LastName = LastName,
+                        Patronymic = Patronymic,
+                        BirthDate = BirthDate,
+                        Gender = Gender,
+                        HasChildren = HasChildren
+                    });
+                });
+            }
+        }
+
+        /// <summary>
+        /// Метод по удалению работника
+        /// </summary>
+        /// <param name="worker"></param>
+        /// <returns></returns>
         public async Task DeleteWorker(Worker worker)
         {
             var request = new DeleteWorkerRequest
@@ -217,10 +237,11 @@ namespace UI.ViewModels
                 LastName = response.LastName,
                 Patronymic = response.Patronymic,
                 BirthDate = response.BirthDate,
-                GenderId = response.GenderId,
+                Gender = response.Gender,
                 HasChildren = response.HasChildren
             };
             Workers.Remove(deletedWorker);
+            OnCreating();
         }
 
         /// <summary>
@@ -235,7 +256,7 @@ namespace UI.ViewModels
                 LastName = worker.LastName,
                 Patronymic = worker.Patronymic,
                 BirthDate = worker.BirthDate,
-                GenderId = worker.GenderId,
+                Gender = worker.Gender,
                 HasChildren = worker.HasChildren
             };
 
@@ -248,12 +269,45 @@ namespace UI.ViewModels
                 LastName = response.LastName,
                 Patronymic = response.Patronymic,
                 BirthDate = response.BirthDate,
-                GenderId = response.GenderId,
+                Gender = response.Gender,
                 HasChildren = response.HasChildren
             };
 
-            newWorker.Gender = GetGenderById(newWorker.GenderId).Result;
             Workers.Add(newWorker);
+            OnCreating();
+        }
+
+        /// <summary>
+        /// Метод для обновления работника
+        /// </summary>
+        /// <returns></returns>
+        public async Task UpdateWorker(Worker worker)
+        {
+            var request = new UpdateWorkerRequest
+            {
+                Id = worker.Id,
+                FirstName = worker.FirstName,
+                LastName = worker.LastName,
+                Patronymic = worker.Patronymic,
+                BirthDate = worker.BirthDate,
+                Gender = worker.Gender,
+                HasChildren = worker.HasChildren
+            };
+
+            var response = await workerGrpcClient.UpdateWorkerAsync(request);
+
+            var workerNew = Workers.FirstOrDefault(w => w.Id == response.Id);
+            if (workerNew != null)
+            {
+                workerNew.Id = response.Id;
+                workerNew.FirstName = response.FirstName;
+                worker.LastName = response.LastName;
+                worker.BirthDate = response.BirthDate;
+                worker.Gender = response.Gender;
+                worker.HasChildren = response.HasChildren;
+            }
+
+            OnCreating();
         }
 
         /// <summary>
@@ -271,57 +325,11 @@ namespace UI.ViewModels
                 LastName = w.LastName,
                 Patronymic = w.Patronymic,
                 BirthDate = w.BirthDate,
-                GenderId = w.GenderId,
+                Gender = w.Gender,
                 HasChildren = w.HasChildren
             }).ToList();
 
-            foreach (var worker in workers)
-            {
-                worker.Gender = GetGenderById(worker.GenderId).Result;
-            }
-
             Workers = new ObservableCollection<Worker>(workers);
         }
-
-        /// <summary>
-        /// Метод для гендера по id
-        /// </summary>
-        /// <returns></returns>
-        public async Task<Gender> GetGenderById(int id)
-        {
-            var request = new GetGenderByIdRequest { Id = id };
-            var response = await genderGrpcClient.GetGenderByIdAsync(request);
-
-            if (response != null)
-            {
-                return new Gender
-                {
-                    Id = response.Id,
-                    Name = response.Name
-                };
-            }
-
-            return null;
-        }
-
-
-        /// <summary>
-        /// Метод для получения всех гендеров)
-        /// </summary>
-        /// <returns></returns>
-        public async Task GetAllGenders()
-        {
-            var request = new Empty();
-            var response = await genderGrpcClient.GetAllGendersAsync(request);
-
-            var genders = response.Genders.Select(g => new Gender
-            {
-                Id = g.Id,
-                Name = g.Name
-            }).ToList();
-
-            Genders = new ObservableCollection<Gender>(genders);
-        }
-
     }
 }

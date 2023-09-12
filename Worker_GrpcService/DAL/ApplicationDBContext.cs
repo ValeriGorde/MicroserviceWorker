@@ -13,18 +13,11 @@ namespace Worker_GrpcService.DAL
             }
         }
         public DbSet<Worker> Workers { get; set; }
-        public DbSet<Gender> Genders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasDefaultSchema("public");
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Gender>().HasData(new List<Gender>
-            {
-                    new() {Id = 1, Name = "Женский"},
-                    new() {Id = 2, Name = "Мужской"}
-            });
 
             modelBuilder.Entity<Worker>().HasData(new List<Worker>
             {
@@ -35,7 +28,7 @@ namespace Worker_GrpcService.DAL
                     LastName = "Гордеева",
                     Patronymic = "Александровна",
                     BirthDate = "14.11.2001",
-                    GenderId = 1,
+                    Gender = "Женский",
                     HasChildren = false
                 }
             });

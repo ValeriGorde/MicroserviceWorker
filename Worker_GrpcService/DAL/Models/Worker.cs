@@ -26,12 +26,7 @@ namespace Worker_GrpcService.DAL.Models
         [Column("hasChildren")]
         public bool HasChildren { get; set; }
 
-        #region Навигационные свойства
-        public int GenderId { get; set; }
-
         [Column("gender")]
-        public Gender? Gender { get; set; }
-
-        #endregion
+        public string Gender { get; set; }
     }
 }
